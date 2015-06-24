@@ -373,21 +373,27 @@ if steps.include?("4b") then
 end
 
 
-#### Step 5: SNP calling ####
+#### Step 5a: SNP calling using GATK ####
 merged_bams.each_with_index do |bam_filename, j|
-  if steps.include?("5") then
+  if steps.include?("5a") then
     if !File.exist?(assemblies.at(j).sub(".fasta", ".dict")) then
       `#{CRESEQDIC} R=#{assemblies.at(j)} O=#{assemblies.at(j).sub(".fasta", ".dict")}`
     end
-    #### using FREEBAYES ####
-#     puts "#{FREEBAYES} --fasta-reference #{assemblies.at(j)} --targets #{sample_names.at(assembly_id)}.bed -b #{bam_filename} -p 1 -i -X -u | #{VCFFILTER} -f 'QUAL > 30' > #{rel_path}/#{sample_names.at(j)}_raw.vcf"
-#     `#{FREEBAYES} --fasta-reference #{assemblies.at(j)} --targets #{sample_names.at(assembly_id)}.bed -b #{bam_filename} -p 1 -i -X -u | #{VCFFILTER} -f 'QUAL > 30' > #{rel_path}/#{sample_names.at(j)}_raw.vcf`
 
     ### using GATK ####
-    puts "java -jar #{GATK} -glm SNP -R #{assemblies.at(j)} -T UnifiedGenotyper -I #{bam_filename} -o #{outputdir}/#{sample_names.at(j)}_raw.vcf -ploidy 1 -L #{sample_names.at(j)}.bed"
-    `java -jar #{GATK} -glm SNP -R #{assemblies.at(j)} -T UnifiedGenotyper -I #{bam_filename} -o #{outputdir}/#{sample_names.at(j)}_raw.vcf -ploidy 1 -L #{sample_names.at(j)}.bed`
-    puts "java -jar #{GATK} -glm SNP -R #{assemblies.at(j)} -T UnifiedGenotyper -I #{bam_filename} -o #{outputdir}/#{sample_names.at(j)}_raw.vcf -ploidy 1 -L #{sample_names.at(j)}.bed"
-    `java -jar #{GATK} -glm SNP -R #{assemblies.at(j)} -T UnifiedGenotyper -I #{bam_filename} -o #{outputdir}/#{sample_names.at(j)}_raw.vcf -ploidy 1 -L #{sample_names.at(j)}.bed`
+    puts "java -jar #{GATK} -glm SNP -R #{assemblies.at(j)} -T UnifiedGenotyper -I #{bam_filename} -o #{outputdir}/#{sample_names.at(j)}_raw.vcf -ploidy 1 -L #{sample_names.at(j)}_sorted.bed"
+    `java -jar #{GATK} -glm SNP -R #{assemblies.at(j)} -T UnifiedGenotyper -I #{bam_filename} -o #{outputdir}/#{sample_names.at(j)}_raw.vcf -ploidy 1 -L #{sample_names.at(j)}_sorted.bed`
+    puts "java -jar #{GATK} -glm SNP -R #{assemblies.at(j)} -T UnifiedGenotyper -I #{bam_filename} -o #{outputdir}/#{sample_names.at(j)}_raw.vcf -ploidy 1 -L #{sample_names.at(j)}_sorted.bed"
+    `java -jar #{GATK} -glm SNP -R #{assemblies.at(j)} -T UnifiedGenotyper -I #{bam_filename} -o #{outputdir}/#{sample_names.at(j)}_raw.vcf -ploidy 1 -L #{sample_names.at(j)}_sorted.bed`
+  end
+end
+
+#### Step 5b: SNP calling using FREEBAYES ####
+merged_bams.each_with_index do |bam_filename, j|
+  if steps.include?("5b") then
+    #### using FREEBAYES ####
+    puts "#{FREEBAYES} --fasta-reference #{assemblies.at(j)} --targets #{sample_names.at(assembly_id)}_sorted.bed -b #{bam_filename} -p 1 -i -X -u | #{VCFFILTER} -f 'QUAL > 30' > #{rel_path}/#{sample_names.at(j)}_raw.vcf"
+    `#{FREEBAYES} --fasta-reference #{assemblies.at(j)} --targets #{sample_names.at(assembly_id)}_sorted.bed -b #{bam_filename} -p 1 -i -X -u | #{VCFFILTER} -f 'QUAL > 30' > #{rel_path}/#{sample_names.at(j)}_raw.vcf`
   end
 end
 
