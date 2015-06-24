@@ -202,7 +202,7 @@ merged_bams = []
 assemblies.each_with_index do |assembly, j|
   if steps.include?("3") then
     # fix 'samtools merge' ignoring @RG
-    `samtools view -H #{outputdir}/#{sample_names[0]}-#{sample_names[j]}_sorted.bam | sed '/@RG/d' - > #{outputdir}/#{sample_names[j]}_header.sam`  
+    `samtools view -H #{outputdir}/#{sample_names[0]}-#{sample_names[j]}_filtered.bam | sed '/@RG/d' - > #{outputdir}/#{sample_names[j]}_header.sam`  
     filtered_bams = []
     
     0.upto(sample_names.length-1) do |i|  # read from different samples ==> marked with RG
