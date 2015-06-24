@@ -29,7 +29,13 @@ class IsolDistOptparser
                     "Examples: #{$0} -i ./dataset1/ERR101899_1.fastq.gz,./dataset1/ERR101900_1.fastq.gz,\
 ./dataset1/ERR103394_1.fastq.gz,./dataset1/ERR103395_1.fastq.gz,./dataset1/ERR103396_1.fastq.gz,./dataset1/ERR103397_1.fastq.gz,\
 ./dataset1/ERR103398_1.fastq.gz,./dataset1/ERR103400_1.fastq.gz,./dataset1/ERR103401_1.fastq.gz,./dataset1/ERR103402_1.fastq.gz,\
-./dataset1/ERR103403_1.fastq.gz,./dataset1/ERR103404_1.fastq.gz,./dataset1/ERR103405_1.fastq.gz,./dataset1/ERR159680_1.fastq.gz -o dataset1_output -s 5,6\n"
+./dataset1/ERR103403_1.fastq.gz,./dataset1/ERR103404_1.fastq.gz,./dataset1/ERR103405_1.fastq.gz,./dataset1/ERR159680_1.fastq.gz -o dataset1_output -s 2,3,4,5,6\n"\
+                    "Example: #{$0} -i ./dataset2/ERR435878_1.fastq.gz,./dataset2/ERR436034_1.fastq.gz,\
+./dataset2/ERR436035_1.fastq.gz,./dataset2/ERR436036_1.fastq.gz,./dataset2/ERR440528_1.fastq.gz,./dataset2/ERR440529_1.fastq.gz,\
+./dataset2/ERR454986_1.fastq.gz,./dataset2/ERR458146_1.fastq.gz,./dataset2/ERR458147_1.fastq.gz,./dataset2/ERR468930_1.fastq.gz,\
+./dataset2/ERR469300_1.fastq.gz,./dataset2/ERR469301_1.fastq.gz,./dataset2/ERR469619_1.fastq.gz,./dataset2/ERR469620_1.fastq.gz,\
+./dataset2/ERR469621_1.fastq.gz,./dataset2/ERR469622_1.fastq.gz,./dataset2/ERR469623_1.fastq.gz,./dataset2/ERR469624_1.fastq.gz,\
+./dataset2/ERR469625_1.fastq.gz,./dataset2/ERR469626_1.fastq.gz,./dataset2/ERR469627_1.fastq.gz -o dataset2_output -s 2,3,4,5,6\n"
       opts.separator ""
       opts.separator "Specific options:"
 
@@ -50,7 +56,7 @@ class IsolDistOptparser
       end
       
       opts.on("-s", "--step 1,2,...", Array,
-              "Specify the process index 1: assembly 2: mapping and filtering 3. merging bam files 4: SNP calling 5. SNP filtering 6: calculating distance matrix") do |step|
+              "Specify the process index 1: assembly 2: mapping and filtering 3. merging bam files 4a: extract ortholog regions using mugsy 4b: extract orthologous regions by checking if the position covered by reads from different samples 5: SNP calling 6. SNP filtering 7: calculating distance matrix") do |step|
         options.steps = step
       end
          
